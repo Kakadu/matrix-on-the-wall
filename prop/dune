@@ -1,0 +1,28 @@
+(env
+ (dev
+  (flags
+   (:standard -warn-error +5-33-27
+   ;-w -3-9-27-26-32
+   ))))
+
+
+
+(library
+ (name proplib)
+ (modules Types)
+ (flags (-rectypes))
+ (libraries OCanren OCanren.tester)
+ (inline_tests)
+ (wrapped false)
+ (preprocess
+  (pps ppx_optcomp OCanren-ppx.ppx_repr OCanren-ppx.ppx_fresh GT.ppx GT.ppx_all ppx_inline_test ppx_fail
+   OCanren-ppx.ppx_distrib
+   )))
+
+(executable
+ (name prop)
+ (modules prop)
+ (flags (-rectypes))
+ (libraries proplib)
+ (preprocess
+  (pps ppx_optcomp OCanren-ppx.ppx_repr OCanren-ppx.ppx_fresh GT.ppx GT.ppx_all ppx_fail )))
