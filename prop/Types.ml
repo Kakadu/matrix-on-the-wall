@@ -20,6 +20,7 @@ type nonrec ('self, 'tuple, 'name) t =
   | Rotate of 'self
   | Expand of 'self * 'name
   | Var of 'tuple
+[@@deriving gt ~options:{ gmap; show; foldl; fmt }]
 
 type ground = (ground, Tuple.ground, GT.string) t]
 
@@ -72,9 +73,11 @@ let is_a_var e contents =
 let flip f a b = f b a
 
 let hackf msg var =
-  debug_var var (flip reify) (fun [ st ] ->
-      Format.printf "%s = %a\n%!" msg (GT.fmt logic) st;
-      success)
+  debug_var var (flip reify) (function
+      | [ st ] ->
+        Format.printf "%s = %a\n%!" msg (GT.fmt logic) st;
+        success
+      | _ -> failwith "should not happen")
 ;;
 
 let rec gced_to : injected -> injected -> goal =
